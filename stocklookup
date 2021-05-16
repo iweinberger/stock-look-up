@@ -1,3 +1,4 @@
+#comment
 if [[ $1 == "--help" ]] || [[ $2 == "--help" ]] || [[ $1 == "-h" ]] || [[ $2 == "-h" ]]; then
 	echo "		==STOCKLOOKUP=="
 	echo "-I = only displays the number"
