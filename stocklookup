@@ -1,0 +1,62 @@
+if [[ $1 == "--help" ]] || [[ $2 == "--help" ]] || [[ $1 == "-h" ]] || [[ $2 == "-h" ]]; then
+	echo "		==STOCKLOOKUP=="
+	echo "-I = only displays the number"
+	echo "-s = specify the stock you want to look at"
+	exit 0
+elif [[ $1 == "" ]] || [[ $1 == " " ]] || [[ $1 == "-I" ]] || [[ $2 == "-I" ]] || [[ $3 == "-I" ]] || [[ $1 == "-d" ]] || [[ $2 == "-d" ]] || [[ $3 == "-d" ]] || [[ $4 == "-d" ]] || [[ $2 == "-s" ]] || [[ $1 == "-s" ]] || [[ $3 == "-s" ]] || [[ $4 == "-s" ]]; then
+	if [[ $1 == "-s" ]]; then
+		IN="`echo $2 | tr a-z A-Z`"
+		curl -s https://finance.yahoo.com/quote/$IN/ > stock.html
+		INPUT="$IN"
+	elif [[ $2 == "-s" ]]; then
+		IN="`echo $3 | tr a-z A-Z`"
+        	curl -s https://finance.yahoo.com/quote/$IN/ > stock.html
+		INPUT="$IN"
+        elif [[ $3 == "-s" ]]; then
+                IN="`echo $4 | tr a-z A-Z`"
+                curl -s https://finance.yahoo.com/quote/$IN/ > stock.html
+                INPUT="$IN"
+        elif [[ $4 == "-s" ]]; then
+                IN="`echo $5 | tr a-z A-Z`"
+                curl -s https://finance.yahoo.com/quote/$IN/ > stock.html
+                INPUT="$IN"
+	else
+		read -p "What stock do you want to look up?:    " INPUT
+		INPUT="`echo $INPUT | tr a-z A-Z`"
+        	INPUT2="https://finance.yahoo.com/quote/$INPUT/"
+        	curl -s $INPUT2 > stock.html
+	fi
+else
+	echo "ERROR: Not a valid operander"
+	echo "Use operander --help or -h for more information"
+	exit 15
+fi
+
+cat stock.html | tr "}" "\n" > stock1.html
+grep -F "span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"32\"" stock1.html > stock2.html
+cat stock2.html | tr "<" "\n" > stock3.html
+grep -F "span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"32\"" stock3.html > stock4.html
+cat stock4.html | tr ">" "\n" > stock5.html
+IT="`cat stock5.html`"
+grep -F "Real Time Price. Currency " stock2.html > cur.html
+cat cur.html | tr "<" "\n" > cur1.html
+grep -F "Real Time Price. Currency" cur1.html > cur2.html
+cat cur2.html | tr "Currency" "\n" > cur3.html
+CU="`tail -1 cur3.html`"
+if [[ $IT == "" ]]; then
+        echo "$INPUT could not be found."
+        exit 20
+else
+        var=""
+fi
+
+if [[ $1 == "-I" ]] || [[ $2 == "-I" ]] || [[ $3 == "-I" ]] || [[ $4 == "-I" ]]; then
+	tail -1 stock5.html
+else
+	echo "The current value of $INPUT at `date` is `tail -1 stock5.html` in$CU. "
+fi
+if [[ $1 == "-d" ]] || [[ $2 == "-d" ]] || [[ $3 == "-d" ]] || [[ $4 == "-d" ]]; then
+	exit 0
+else
+	rm stock.html stock1.html stock2.html stock3.html stock4.html stock5.html cur.html cur1.html cur2.html cur3.html
+fi
