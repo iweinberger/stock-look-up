@@ -55,6 +55,7 @@ elif [[ $1 == "-e" ]]; then
 	else
 		echo "ERROR: editor $ED could not be found"
 		exit 10
+	fi
 else
 	echo "ERROR: Not a valid operander"
 	echo "Use operander --help or -h for more information"
@@ -62,11 +63,9 @@ else
 fi
 
 cat stock.html | tr "}" "\n" > stock1.html
-grep -F "span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"32\"" stock1.html > stock2.html
-cat stock2.html | tr "<" "\n" > stock3.html
-grep -F "span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"32\"" stock3.html > stock4.html
-cat stock4.html | tr ">" "\n" > stock5.html
-IT="`cat stock5.html`"
+grep -F "span class=\"_11248a25 _8e5a1db9\"" stock1.html > stock2.html
+cat stock2.html | tr ">" "\n" | tr "<" "\n" > stock3.html
+IT="`head 2 stock3.html | tail 2`"
 grep -F "Currency " stock2.html > cur.html
 cat cur.html | tr "<" "\n" > cur1.html
 grep -F "Currency" cur1.html > cur2.html
@@ -87,5 +86,5 @@ fi
 if [[ $1 == "-d" ]] || [[ $2 == "-d" ]] || [[ $3 == "-d" ]] || [[ $4 == "-d" ]]; then
 	exit 0
 else
-	rm stock.html stock1.html stock2.html stock3.html stock4.html stock5.html cur.html cur1.html cur2.html cur3.html
+	rm stock.html stock1.html stock2.html stock3.html cur.html cur1.html cur2.html cur3.html
 fi
