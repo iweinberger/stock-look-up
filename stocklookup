@@ -65,7 +65,7 @@ fi
 cat stock.html | tr "}" "\n" > stock1.html
 grep -F "span class=\"_11248a25 _8e5a1db9\"" stock1.html > stock2.html
 cat stock2.html | tr ">" "\n" | tr "<" "\n" > stock3.html
-IT="`head 2 stock3.html | tail 2`"
+IT="`head -2 stock3.html | tail -2`"
 grep -F "Currency " stock2.html > cur.html
 cat cur.html | tr "<" "\n" > cur1.html
 grep -F "Currency" cur1.html > cur2.html
